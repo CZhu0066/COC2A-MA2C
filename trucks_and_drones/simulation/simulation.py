@@ -2,23 +2,7 @@ import numpy as np
 from trucks_and_drones.config import cfg
 
 class BaseSimulator:
-    """
-    Dispatch + Event‑Completion 两阶段严格对应论文 Section (3)。
-    同时维护 visited_nodes 用于 IAM 中的节点访问掩码。
     
-    修复内容：
-    1. 在任务分配时就预先标记节点，避免重复分配
-    2. 改进冲突解决，失败载具设为空闲状态，完全移除冲突动作
-    3. 修复状态管理，避免不必要的状态切换
-    4. **关键修复**：完全清空失败者的动作，确保不执行任何新动作
-    5. **新增修复**：汇合逻辑同步，无人机请求汇合时立即触发卡车汇合
-    6. **新增修复**：修复奖励计算和终止条件
-    7. **关键修复**：奖励计算时机修正，在时间推进前计算
-    8. **关键修复**：完善汇合同步机制，确保卡车响应无人机汇合请求
-    9. **新增修复**：预分配时立即更新delta状态防止重复分配
-    10. **汇合修复**：区分卡车服务动作和汇合动作，汇合时不提供服务
-    11. **关键修复**：修复载具级别冲突处理，只拒绝失败的具体载具，不影响同智能体的其他载具
-    """
     def __init__(self, temp_db, trucks, drones, reward_calc):
         self.temp_db            = temp_db
         self.trucks = trucks  # 独立的卡车列表
